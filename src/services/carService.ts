@@ -10,4 +10,4 @@ const carService={
     deleteById:(id:number):IRes<void>=>apiService.delete(urls.cars.byId(id))
 }
 
-export {carService}
+export {carService }
