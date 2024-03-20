@@ -1,15 +1,18 @@
 import React, {useEffect} from 'react';
 import css from './Header.module.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {authService} from "../../services";
 import {authActions} from "../../redux";
+import {AppBar, Button, Container, Toolbar, Typography} from '@mui/material';
 
 const Header = () => {
 
     const {currentUser} = useAppSelector(state => state.auth);
     const access=authService.getAccessToken();
-    const dispatch=useAppDispatch()
+    const dispatch=useAppDispatch();
+    const navigate=useNavigate()
+
 
     useEffect(()=>{
         if (access && !currentUser){
@@ -19,26 +22,53 @@ const Header = () => {
 
 
     return (
-        <div className={css.Header}>
-            <div>
-                <h1>Cars</h1>
-            </div>
+        <AppBar position="static" color={'inherit'}>
+            <Container maxWidth="xl" sx={
+                {
+                    'display':'flex',
+                    'justifyContent':'space-between'
+                }
+            }>
+                <Toolbar disableGutters>
 
-            {
-                currentUser
-                    ?
-                    <div>{currentUser.username} ---{currentUser.last_login}</div>
-                    :
+                    <Typography
+                        variant="h5"
+                        noWrap
 
-                    <div className={css.tools}>
-                        <Link to={'/login'}>Login</Link>
-                        <Link to={'/register'}>Register</Link>
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.2rem',
+                            color: 'inherit',
 
-                    </div>
-            }
+                        }}
+                    >
+                        CARS
+                    </Typography>
+                </Toolbar>
+                <Toolbar>
+                        <Button
 
+                           color={'inherit'}
+                           onClick={()=>navigate('/login')}
+                        >
+                            Login
 
-        </div>
+                        </Button>
+                    <Button
+
+                           color={'inherit'}
+                           onClick={()=>navigate('/register')}
+                        >
+                            Register
+
+                        </Button>
+
+                </Toolbar>
+            </Container>
+        </AppBar>
     );
 };
 
