@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import css from './Header.module.css'
 import {Link} from "react-router-dom";
-import {useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {authService} from "../../services";
+import {authActions} from "../../redux";
 
 const Header = () => {
 
-    const {currentUser} = useAppSelector(state => state.auth)
+    const {currentUser} = useAppSelector(state => state.auth);
+    const access=authService.getAccessToken();
+    const dispatch=useAppDispatch()
+
+    useEffect(()=>{
+        if (access && !currentUser){
+        dispatch(authActions.me())
+        }
+    },[])
+
+
     return (
         <div className={css.Header}>
             <div>

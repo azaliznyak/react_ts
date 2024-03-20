@@ -17,14 +17,20 @@ const authService = {
         return me
     },
 
+    async refresh():Promise<void>{
+        const refresh= this.getRefreshToken()
+        const {data}=await apiService.post(urls.auth.refresh, {refresh});
+        this.setTokens(data)
+    },
+
     me(): IRes<IUser> {
         return apiService.get(urls.auth.me)
     },
 
 
     setTokens({access, refresh}: IToken): void {              // приймає обєкт {access, refresh}:IToken та нічого не повертає
-        localStorage.setItem(accessTokenKey, 'access')
-        localStorage.setItem(refreshTokenKey, 'refresh')
+        localStorage.setItem(accessTokenKey, access)
+        localStorage.setItem(refreshTokenKey, refresh)
     },
     getAccessToken(): string {                               //функція нічого не приймає але повертає стрічку
         return localStorage.getItem(accessTokenKey)
